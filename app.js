@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose')
 
 const feedRoutes = require('./routes/feed');
 
@@ -17,4 +18,12 @@ app.use((req, res, next) => {
 
 app.use('/feed', feedRoutes);
 
-app.listen(8080);
+mongoose
+    .connect(
+        'mongodb+srv://femi:femi@ibook-o0a7o.mongodb.net/ibook?retryWrites=true&w=majority',
+        { useNewUrlParser: true }
+    )
+    .then(result => {
+        app.listen(8080)
+    })
+    .catch(err => console.log(err))
