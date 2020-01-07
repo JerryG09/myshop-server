@@ -59,14 +59,16 @@ app.use((error, req, res, next) => {
   res.status(status).json({ message: message, data: data });
 });
 
-
 mongoose
-    .connect(
-        'mongodb+srv://femi:femi@ibook-o0a7o.mongodb.net/myshop?retryWrites=true&w=majority',
-        { useNewUrlParser: true }
-    )
-    .then(result => {
-        app.listen(8080)
-    })
-    .catch(err => console.log(err))
-3
+  .connect(
+    'mongodb+srv://femi:femi@ibook-o0a7o.mongodb.net/myshop?retryWrites=true&w=majority',
+    { useNewUrlParser: true }
+  )
+  .then(result => {
+    const server = app.listen(8080);
+    const io = require('./socket').init(server);
+    io.on('connection', socket => {
+      console.log('Client connected');
+    });
+  })
+  .catch(err => console.log(err));
